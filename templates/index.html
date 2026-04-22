@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Algoritmo Heurístico</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg, #fbc2eb, #a18cd1);
+    text-align: center;
+}
+
+h1 {
+    color: #6a1b9a;
+}
+
+input {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
+    width: 250px;
+}
+
+button {
+    background-color: #ba68c8;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ab47bc;
+}
+
+#resultado {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-block;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Algoritmo Heurístico</h1>
+
+<p>Estado inicial </p>
+<input type="text" id="inicio">
+
+<p>Estado final </p>
+<input type="text" id="final">
+
+<br>
+<button onclick="resolver()">Resolver</button>
+
+<div id="resultado"></div>
+
+<script>
+function resolver() {
+    let inicio = document.getElementById("inicio").value;
+    let final = document.getElementById("final").value;
+
+    fetch("/resolver", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({inicio: inicio, final: final})
+    })
+    .then(res => res.json())
+    .then(data => {
+        let div = document.getElementById("resultado");
+
+        if (data.error) {
+            div.innerHTML = data.error;
+            return;
+        }
+
+        let html = "<h3>Resultado:</h3>";
+        data.forEach(paso => {
+            html += "<p>" + paso + "</p>";
+        });
+
+        div.innerHTML = html;
+    });
+}
+</script>
+
+</body>
+</html>
